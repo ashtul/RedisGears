@@ -152,7 +152,7 @@ setup:
 	$(SHOW)./system-setup.py
 
 get_deps fetch:
-	$(SHOW)git submodule update --init --recursive
+#	$(SHOW)git submodule update --init --recursive
 	$(SHOW)$(MAKE) --no-print-directory -C build/libevent source
 
 #----------------------------------------------------------------------------------------------
