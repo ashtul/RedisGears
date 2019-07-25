@@ -1,10 +1,15 @@
-# BUILD redisfab/redisgears-${OSNICK}:M.m.b-x64
+# BUILD redisfab/redisgears-${OSNICK}:M.m.b-${ARCH}
 
+# stretch|bionic|buster
 ARG OSNICK=buster
 
+# ARCH=x64|arm64v8|arm32v7
+ARG ARCH=x64
+
 #----------------------------------------------------------------------------------------------
-# FROM redisfab/redis-x64-${OSNICK}:5.0.5 AS builder
-FROM redis:latest AS builder
+# FROM redis:latest AS builder
+FROM redisfab/redis-${ARCH}-${OSNICK}:5.0.5 AS builder
+
 
 ADD . /build
 WORKDIR /build
@@ -13,13 +18,13 @@ RUN ./deps/readies/bin/getpy2
 RUN ./system-setup.py
 RUN make fetch SHOW=1
 
-ENV X_NPROC "cat /proc/cpuinfo|grep processor|wc -l" 
+ENV X_NPROC "cat /proc/cpuinfo|grep processor|wc -l"
 RUN echo nproc=$(nproc); echo NPROC=$(eval "$X_NPROC")
 RUN make all SHOW=1
 
 #----------------------------------------------------------------------------------------------
-# FROM redisfab/redis-x64-${OSNICK}:5.0.5
-FROM redis:latest
+# FROM redis:latest
+FROM redisfab/redis-${ARCH}-${OSNICK}:5.0.5
 
 ENV REDIS_MODULES /opt/redislabs/lib/modules
 
